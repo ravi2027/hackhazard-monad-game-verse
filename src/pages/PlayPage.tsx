@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import WalletConnect from "@/components/blockchain/WalletConnect";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,24 @@ const PlayPage = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+
+  // Check if wallet is connected whenever the wallet info changes
+  useEffect(() => {
+    const checkWalletConnection = () => {
+      // In a real app, we would check for active wallet connections
+      // For now, we'll just check if there's wallet info in localStorage
+      const hasWalletInfo = localStorage.getItem('walletInfo') !== null;
+      setIsConnected(hasWalletInfo);
+    };
+    
+    // Set up an event listener for wallet connection changes
+    window.addEventListener('storage', checkWalletConnection);
+    checkWalletConnection();
+    
+    return () => {
+      window.removeEventListener('storage', checkWalletConnection);
+    };
+  }, []);
 
   // This is a mock function to simulate NFT minting
   const mintDemoNFT = async () => {
@@ -37,6 +55,7 @@ const PlayPage = () => {
     }
   };
 
+  // This would be called from the WalletConnect component
   const handleWalletConnect = () => {
     setIsConnected(true);
   };

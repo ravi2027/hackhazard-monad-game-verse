@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Wallet } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -17,7 +17,18 @@ interface WalletInfo {
 const WalletConnect = ({ className = "" }: WalletConnectProps) => {
   const [connecting, setConnecting] = useState(false);
   const [walletInfo, setWalletInfo] = useState<WalletInfo | null>(null);
+  const [isMetaMaskInstalled, setIsMetaMaskInstalled] = useState<boolean | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Check if MetaMask is installed when the component mounts
+    const checkMetaMaskInstalled = () => {
+      const installed = typeof window !== "undefined" && !!window.ethereum;
+      setIsMetaMaskInstalled(installed);
+    };
+    
+    checkMetaMaskInstalled();
+  }, []);
 
   const connectWallet = async () => {
     setConnecting(true);
@@ -26,24 +37,38 @@ const WalletConnect = ({ className = "" }: WalletConnectProps) => {
     try {
       // Check if MetaMask is installed
       if (window.ethereum) {
-        // Simulate connection delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Mock successful connection
-        const mockAddress = "0x" + Array(40).fill(0).map(() => 
-          Math.floor(Math.random() * 16).toString(16)).join('');
+        // Request account access
+        try {
+          // Simulate a real connection by waiting
+          await new Promise(resolve => setTimeout(resolve, 1000));
           
-        setWalletInfo({
-          address: mockAddress,
-          balance: "1000 MON",
-          network: "Monad Testnet"
-        });
+          // In a real implementation, we would do:
+          // const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          // const account = accounts[0];
+          
+          // Mock successful connection with a random address
+          const mockAddress = "0x" + Array(40).fill(0).map(() => 
+            Math.floor(Math.random() * 16).toString(16)).join('');
+            
+          setWalletInfo({
+            address: mockAddress,
+            balance: "1000 MON",
+            network: "Monad Testnet"
+          });
 
-        toast({
-          title: "Wallet Connected",
-          description: "Successfully connected to your wallet",
-          variant: "default",
-        });
+          toast({
+            title: "Wallet Connected",
+            description: "Successfully connected to your wallet",
+            variant: "default",
+          });
+        } catch (error) {
+          console.error("User rejected the connection request", error);
+          toast({
+            title: "Connection Rejected",
+            description: "You rejected the connection request",
+            variant: "destructive",
+          });
+        }
       } else {
         toast({
           title: "MetaMask not found",
