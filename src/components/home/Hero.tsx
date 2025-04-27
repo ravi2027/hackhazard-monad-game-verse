@@ -1,11 +1,8 @@
-
 import { ArrowRight, Gamepad } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
 const Hero = () => {
-  return (
-    <section className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
+  return <section className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
       <div className="absolute inset-0 grid-pattern z-0"></div>
       <div className="absolute top-0 right-0 w-full h-full bg-gradient-radial from-monad/20 via-transparent to-transparent opacity-70 z-0"></div>
       
@@ -64,11 +61,7 @@ const Hero = () => {
           <div className="md:w-1/2">
             <div className="relative">
               <div className="glass-card rounded-xl overflow-hidden border-2 border-monad/20 animate-float">
-                <img 
-                  src="https://assets-lovable.b-cdn.net/cyberpunk-game-character-futuristic.webp" 
-                  alt="MonadVerse Game" 
-                  className="w-full h-auto rounded-lg"
-                />
+                <img alt="MonadVerse Game" className="w-full h-auto rounded-lg" src="/lovable-uploads/1c47dd40-d9d7-427f-b575-a6629c53c32c.jpg" />
               </div>
               <div className="absolute -bottom-6 -right-6 glass-card p-4 rounded-lg">
                 <div className="text-monad font-bold">Powered by</div>
@@ -78,8 +71,6 @@ const Hero = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
